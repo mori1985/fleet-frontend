@@ -1,32 +1,45 @@
-// theme.ts
+// src/theme.ts
 import { createTheme } from '@mui/material/styles';
 
-// این تم برای داشبورد Fleet طراحی شده و رنگ‌ها، کارت‌ها، دکمه‌ها و جدول‌ها هماهنگ هستند
 const theme = createTheme({
   palette: {
-    primary: { main: '#1976d2' },      // آبی تیره و مدرن
-    secondary: { main: '#ff4081' },    // صورتی جذاب برای button ها
-    background: { default: '#f5f7fa', paper: '#ffffff' }, // پس‌زمینه روشن و کارت سفید
-    text: { primary: '#1a1a1a', secondary: '#555555' },
-    success: { main: '#4caf50' },
-    warning: { main: '#ff9800' },
-    error: { main: '#f44336' },
+    mode: 'dark', // پیش‌فرض دارک
+    primary: { main: '#3B82F6' },      // آبی روشن و مدرن
+    secondary: { main: '#EC4899' },    // صورتی جذاب
+    background: { 
+      default: '#0f0f0f', 
+      paper: '#1a1a1a' 
+    },
+    text: { 
+      primary: '#ffffff', 
+      secondary: '#b0b0b0' 
+    },
+    success: { main: '#10B981' },
+    warning: { main: '#F59E0B' },
+    error: { main: '#EF4444' },
+    divider: 'rgba(255, 255, 255, 0.12)',
   },
   typography: {
-    h5: { fontWeight: 600 },
+    fontFamily: '"Poppins", "Roboto", "Helvetica", "Arial", sans-serif',
+    h5: { fontWeight: 700, letterSpacing: '0.5px' },
+    h6: { fontWeight: 600 },
     body1: { fontSize: 14 },
-    body2: { fontSize: 13, color: '#555555' },
+    body2: { fontSize: 13, color: '#b0b0b0' },
   },
   components: {
     MuiCard: {
       styleOverrides: {
         root: {
           borderRadius: 16,
-          boxShadow: '0 6px 20px rgba(0,0,0,0.08)',
-          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          background: 'linear-gradient(135deg, #1a1a1a 0%, #242424 100%)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.37)',
+          backdropFilter: 'blur(10px)',
+          transition: 'all 0.3s ease',
           '&:hover': {
-            transform: 'translateY(-3px)',
-            boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
+            transform: 'translateY(-4px)',
+            boxShadow: '0 16px 40px rgba(0, 0, 0, 0.5)',
+            borderColor: 'rgba(59, 130, 246, 0.3)',
           },
         },
       },
@@ -35,9 +48,13 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           textTransform: 'none',
-          borderRadius: 10,
-          transition: '0.3s',
-          '&:hover': { opacity: 0.9 },
+          borderRadius: 12,
+          fontWeight: 600,
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            transform: 'translateY(-1px)',
+            boxShadow: '0 8px 20px rgba(59, 130, 246, 0.3)',
+          },
         },
       },
     },
@@ -45,6 +62,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 12,
+          fontWeight: 500,
         },
       },
     },
@@ -53,7 +71,19 @@ const theme = createTheme({
         root: {
           '& .MuiOutlinedInput-root': {
             borderRadius: 12,
+            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+            '&:hover': {
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            },
           },
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundImage: 'none',
+          backgroundColor: '#1a1a1a',
         },
       },
     },

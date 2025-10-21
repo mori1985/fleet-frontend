@@ -28,11 +28,11 @@ const ReportsSection: React.FC<ReportsSectionProps> = ({ vehicles }) => {
   };
 
   const pieData = {
-    labels: ['در حال حرکت', 'متوقف', 'بی‌کار'],
+    labels: ['Moving', 'Stopped', 'Idle'],
     datasets: [{
       data: [statusCount.moving, statusCount.stopped, statusCount.idle],
-      backgroundColor: ['#4CAF50', '#F44336', '#FFC107'],
-      borderWidth: 2,
+      backgroundColor: ['#10B981', '#EF4444', '#F59E0B'],
+      borderWidth: 3,
       borderColor: '#fff',
     }],
   };
@@ -40,20 +40,20 @@ const ReportsSection: React.FC<ReportsSectionProps> = ({ vehicles }) => {
   const barData = {
     labels: vehicles.map(v => v.name),
     datasets: [{
-      label: 'مسافت (کیلومتر)',
+      label: 'Distance (km)',
       data: vehicles.map(v => v.distance),
-      backgroundColor: 'rgba(25, 118, 210, 0.7 stave)',
+      backgroundColor: 'rgba(59, 130, 246, 0.8)',
       borderRadius: 8,
     }],
   };
 
   const lineData = {
-    labels: ['شنبه', 'یک‌شنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه'],
+    labels: ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
     datasets: [{
-      label: 'مسافت کل (کیلومتر)',
+      label: 'Total Distance (km)',
       data: [1200, 1350, 1100, 1500, 1600, 1400, 1300],
-      borderColor: '#1976d2',
-      backgroundColor: 'rgba(25, 118, 210, 0.1)',
+      borderColor: '#8B5CF6',
+      backgroundColor: 'rgba(139, 92, 246, 0.1)',
       tension: 0.4,
       fill: true,
     }],
@@ -61,15 +61,15 @@ const ReportsSection: React.FC<ReportsSectionProps> = ({ vehicles }) => {
 
   return (
     <Box className="space-y-8">
-      <Typography variant="h4" className="text-center font-bold text-gray-800 mb-8">
-        گزارش‌های تحلیلی
+      <Typography variant="h4" className="text-center font-bold text-indigo-800 mb-8">
+        Analytics Reports
       </Typography>
 
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4, justifyContent: 'center' }}>
         <Box sx={{ flex: '1 1 300px', maxWidth: '400px' }}>
-          <Card className="h-full shadow-lg hover:shadow-xl transition-shadow">
+          <Card className="h-full shadow-lg hover:shadow-xl transition-shadow border-t-4 border-t-green-500">
             <CardContent>
-              <Typography variant="h6" gutterBottom>وضعیت خودروها</Typography>
+              <Typography variant="h6" gutterBottom className="text-gray-700">Vehicle Status</Typography>
               <Box sx={{ height: 280 }}>
                 <Pie data={pieData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }} />
               </Box>
@@ -78,9 +78,9 @@ const ReportsSection: React.FC<ReportsSectionProps> = ({ vehicles }) => {
         </Box>
 
         <Box sx={{ flex: '1 1 300px', maxWidth: '400px' }}>
-          <Card className="h-full shadow-lg hover:shadow-xl transition-shadow">
+          <Card className="h-full shadow-lg hover:shadow-xl transition-shadow border-t-4 border-t-blue-500">
             <CardContent>
-              <Typography variant="h6" gutterBottom>مسافت طی‌شده</Typography>
+              <Typography variant="h6" gutterBottom className="text-gray-700">Distance Traveled</Typography>
               <Box sx={{ height: 280 }}>
                 <Bar data={barData} options={{ responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }} />
               </Box>
@@ -89,9 +89,9 @@ const ReportsSection: React.FC<ReportsSectionProps> = ({ vehicles }) => {
         </Box>
 
         <Box sx={{ flex: '1 1 300px', maxWidth: '400px' }}>
-          <Card className="h-full shadow-lg hover:shadow-xl transition-shadow">
+          <Card className="h-full shadow-lg hover:shadow-xl transition-shadow border-t-4 border-t-purple-500">
             <CardContent>
-              <Typography variant="h6" gutterBottom>روند هفتگی</Typography>
+              <Typography variant="h6" gutterBottom className="text-gray-700">Weekly Trend</Typography>
               <Box sx={{ height: 280 }}>
                 <Line data={lineData} options={{ responsive: true, maintainAspectRatio: false }} />
               </Box>

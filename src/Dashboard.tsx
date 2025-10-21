@@ -1,6 +1,6 @@
-
-import React, { useEffect, useState, useRef } from 'react';
-import { Container, Box } from '@mui/material';
+ import React, { useEffect, useState, useRef } from 'react';
+import { Container, Box, TextField, InputAdornment } from '@mui/material';
+import { Search as SearchIcon } from '@mui/icons-material';
 import Navbar from './components/Navbar';
 import FilterSection from './components/FilterSection';
 import KPISection from './components/KPISection';
@@ -22,15 +22,13 @@ const Dashboard: React.FC = () => {
 
   const mapRef = useRef<any>(null);
 
-  // اسکرول نرم
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  // دریافت خودروها
   useEffect(() => {
-    const fetchVehicles =	async () => {
+    const fetchVehicles = async () => {
       try {
         setLoading(true);
         const res = await fetch(`${BACKEND_URL}/vehicles`);
@@ -46,7 +44,6 @@ const Dashboard: React.FC = () => {
     fetchVehicles();
   }, []);
 
-  // دریافت تاریخچه
   const fetchHistory = async (id: number) => {
     try {
       const res = await fetch(`${BACKEND_URL}/vehicles/${id}/history`);
@@ -69,13 +66,13 @@ const Dashboard: React.FC = () => {
   );
 
   if (loading) return (
-    <Box className="flex items-center justify-center h-screen text-xl font-medium text-gray-600">
-      در حال بارگذاری...
+    <Box className="flex items-center justify-center h-screen text-xl font-medium text-blue-700">
+      Loading Dashboard...
     </Box>
   );
   if (error) return (
     <Box className="text-red-600 text-center mt-10 text-lg">
-      خطا: {error}
+      Error: {error}
     </Box>
   );
 
@@ -84,7 +81,7 @@ const Dashboard: React.FC = () => {
       <Navbar onNavigate={scrollToSection} />
 
       {/* Dashboard */}
-      <section id="dashboard" className="py-16 bg-gradient-to-b from-blue-50 to-white">
+      <section id="dashboard" className="py-16 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
         <Container maxWidth="xl">
           <FilterSection
             filterStatus={filterStatus}
@@ -101,7 +98,7 @@ const Dashboard: React.FC = () => {
       </section>
 
       {/* Map */}
-      <section id="map" className="py-16 bg-gray-50">
+      <section id="map" className="py-16 bg-gray-100">
         <Container maxWidth="xl">
           <MapSection
             center={center}
@@ -113,24 +110,41 @@ const Dashboard: React.FC = () => {
         </Container>
       </section>
 
+      {/* Vehicle List with Search */}
+      <section id="data-entry" className="py-16 bg-white">
+        <Container maxWidth="xl">
+          <Box sx={{ mb: 4, maxWidth: 500 }}>
+            <TextField
+              fullWidth
+              placeholder="Search vehicles..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon className="text-blue-600" />
+                  </InputAdornment>
+                ),
+              }}
+              variant="outlined"
+              size="small"
+            />
+          </Box>
+          <TableSection filteredVehicles={filteredVehicles} fetchHistory={fetchHistory} />
+        </Container>
+      </section>
+
       {/* Reports */}
-      <section id="reports" className="py-16 bg-white">
+      <section id="reports" className="py-16 bg-gradient-to-r from-indigo-50 to-blue-50">
         <Container maxWidth="xl">
           <ReportsSection vehicles={vehicles} />
         </Container>
       </section>
 
       {/* Performance */}
-      <section id="performance" className="py-16 bg-gradient-to-r from-indigo-50 to-purple-50">
+      <section id="performance" className="py-16 bg-gradient-to-br from-purple-50 via-pink-50 to-red-50">
         <Container maxWidth="xl">
           <PerformanceSection vehicles={vehicles} />
-        </Container>
-      </section>
-
-      {/* Table (Data Entry) */}
-      <section id="data-entry" className="py-16 bg-gray-100">
-        <Container maxWidth="xl">
-          <TableSection filteredVehicles={filteredVehicles} fetchHistory={fetchHistory} />
         </Container>
       </section>
     </>

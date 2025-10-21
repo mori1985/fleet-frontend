@@ -3,16 +3,12 @@ export interface Vehicle {
   name: string;
   lat: number;
   lng: number;
-  status?: string;
+  status: 'moving' | 'stopped' | 'idle';
   distance: number;
-  driver_name: string;
-  driver_phone: string;
-  updated_at: string;
+  speed: number; // اضافه شد
 }
 
 export interface VehicleHistory {
-  id: number;
-  vehicle_id: number;
   lat: number;
   lng: number;
   timestamp: string;

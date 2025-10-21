@@ -1,75 +1,111 @@
-// MapSection.tsx
-import React, { useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
+
+import React from 'react';
+import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Card, CardContent, Typography } from '@mui/material';
 import { Vehicle, LatLngExpression } from '../types';
+
+// Fix Leaflet icon issue
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
 
 interface MapSectionProps {
   center: LatLngExpression;
   filteredVehicles: Vehicle[];
   selectedPath: LatLngExpression[];
   fetchHistory: (id: number) => void;
-  mapRef: React.MutableRefObject<any>;
+  mapRef: React.RefObject<any>;
 }
 
 const MapSection: React.FC<MapSectionProps> = ({ center, filteredVehicles, selectedPath, fetchHistory, mapRef }) => {
-  useEffect(() => {
-    delete (L.Icon.Default.prototype as any)._getIconUrl;
-    L.Icon.Default.mergeOptions({
-      iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-    });
-  }, []);
-
-const getVehicleIcon = (status?: string) => {
-  const color = status === 'moving' ? '#4CAF50' : status === 'stopped' ? '#F44336' : '#FFC107';
-  return L.divIcon({
-    className: 'blinking-car',
-    html: `
-      <svg width="32" height="32" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  const createVehicleIcon = (status: string | undefined) => {
+    const safeStatus = status || 'idle';
+    const color = safeStatus === 'moving' ? '#10B981' : safeStatus === 'stopped' ? '#EF4444' : '#F59E0B';
+    const pulse = safeStatus === 'moving' ? '<div class="pulse"></div>' : '';
+    
+    return L.divIcon({
+      html: `
+        <div style="position: relative; width: 32px; height: 32px;">
+          ${pulse}
+          <div style="
+            background: ${color};
+            width: 32px;
+            height: 32px;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: 3px solid white;
+          ">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 16 16" style="transform: rotate(45deg);">
+              <path d="M8 1a2 2 0 0 0-2 2v4H5V5H3v6h2v-2h1v4a2 2 0 0 0 4 0V9h1v2h2V5h-2v2h-1V3a2 2 0 0 0-2-2z"/>
+            </svg>
+          </div>
+        </div>
         <style>
-          @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+          @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
           }
-          .car { fill: ${color}; animation: blink 1.5s infinite; }
+          .pulse {
+            position: absolute;
+            top: 0; left: 0; width: 32px; height: 32px;
+            background: rgba(16, 185, 129, 0.4);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            z-index: -1;
+          }
         </style>
-        <path class="car" d="M16 36h32l4-12H12l4 12zm-4-16h40l6 16H6l6-16zm2 20h36v4H14v-4zm4 8h24v4H18v-4z"/>
-        <circle cx="20" cy="52" r="6" fill="#333"/>
-        <circle cx="44" cy="52" r="6" fill="#333"/>
-      </svg>
-    `,
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -32],
-  });
-};
+      `,
+      className: '',
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+    });
+  };
 
   return (
-    <Card sx={{ mb: 4 }}>
-      <CardContent>
-        <Typography variant="h5" gutterBottom>
-          Live Map
-        </Typography>
-        <MapContainer center={center} zoom={13} style={{ height: 450, width: '100%' }} ref={mapRef}>
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          {filteredVehicles.map(v => (
-            <Marker key={v.id} position={[v.lat, v.lng]} icon={getVehicleIcon(v.status)} eventHandlers={{ mouseover: () => fetchHistory(v.id) }}>
-              <Popup>
-                {v.name}<br />
-                Driver: {v.driver_name}<br />
-                Status: {v.status}<br />
-                Last Update: {new Date(v.updated_at).toLocaleString()}
-              </Popup>
-            </Marker>
-          ))}
-          {selectedPath.length > 0 && <Polyline positions={selectedPath} color="#1976d2" weight={4} />}
-        </MapContainer>
-      </CardContent>
-    </Card>
+    <div style={{ height: '600px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
+      <MapContainer center={center} zoom={13} style={{ height: '100%', width: '100%' }} ref={mapRef}>
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        />
+        {filteredVehicles.map(vehicle => (
+          <Marker
+            key={vehicle.id}
+            position={[vehicle.lat, vehicle.lng]}
+            icon={createVehicleIcon(vehicle.status)}
+            eventHandlers={{
+              click: () => fetchHistory(vehicle.id),
+            }}
+          >
+            <Popup>
+              <div className="text-center">
+                <strong>{vehicle.name}</strong><br />
+                Status: <span className={`font-bold ${
+                  vehicle.status === 'moving' ? 'text-green-600' : 
+                  vehicle.status === 'stopped' ? 'text-red-600' : 'text-amber-600'
+                }`}>
+                  {(vehicle.status || 'unknown').toUpperCase()}
+                </span><br />
+                Speed: {vehicle.speed} km/h<br />
+                Distance: {vehicle.distance} km
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+        {selectedPath.length > 0 && (
+          <Polyline positions={selectedPath} color="#3B82F6" weight={4} opacity={0.8} />
+        )}
+      </MapContainer>
+    </div>
   );
 };
 
