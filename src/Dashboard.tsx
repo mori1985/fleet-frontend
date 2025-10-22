@@ -1,6 +1,5 @@
- import React, { useEffect, useState, useRef } from 'react';
-import { Container, Box, TextField, InputAdornment } from '@mui/material';
-import { Search as SearchIcon } from '@mui/icons-material';
+import React, { useEffect, useState, useRef } from 'react';
+import { Container, Box } from '@mui/material';
 import Navbar from './components/Navbar';
 import FilterSection from './components/FilterSection';
 import KPISection from './components/KPISection';
@@ -66,7 +65,7 @@ const Dashboard: React.FC = () => {
   );
 
   if (loading) return (
-    <Box className="flex items-center justify-center h-screen text-xl font-medium text-blue-700">
+    <Box className="flex items-center justify-center h-screen text-xl font-medium text-purple-600">
       Loading Dashboard...
     </Box>
   );
@@ -80,25 +79,28 @@ const Dashboard: React.FC = () => {
     <>
       <Navbar onNavigate={scrollToSection} />
 
-      {/* Dashboard */}
-      <section id="dashboard" className="py-16 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      {/* Dashboard: KPI + Filter */}
+      <section id="dashboard" className="py-16 bg-gradient-to-br from-purple-50 via-indigo-50 to-pink-50">
         <Container maxWidth="xl">
+          {/* KPI اول */}
+          <KPISection
+            activeVehiclesCount={activeVehiclesCount}
+            totalVehicles={totalVehicles}
+            totalDistanceValue={totalDistanceValue}
+          />
+
+          {/* فیلتر بعد از KPI */}
           <FilterSection
             filterStatus={filterStatus}
             setFilterStatus={setFilterStatus}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
           />
-          <KPISection
-            activeVehiclesCount={activeVehiclesCount}
-            totalVehicles={totalVehicles}
-            totalDistanceValue={totalDistanceValue}
-          />
         </Container>
       </section>
 
       {/* Map */}
-      <section id="map" className="py-16 bg-gray-100">
+      <section id="map" className="py-16 bg-gradient-to-r from-indigo-50 to-blue-50">
         <Container maxWidth="xl">
           <MapSection
             center={center}
@@ -110,32 +112,22 @@ const Dashboard: React.FC = () => {
         </Container>
       </section>
 
-      {/* Vehicle List with Search */}
-      <section id="data-entry" className="py-16 bg-white">
+      {/* Vehicle List + Search داخل TableSection */}
+      <section id="data-entry" className="py-16 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
         <Container maxWidth="xl">
-          <Box sx={{ mb: 4, maxWidth: 500 }}>
-            <TextField
-              fullWidth
-              placeholder="Search vehicles..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon className="text-blue-600" />
-                  </InputAdornment>
-                ),
-              }}
-              variant="outlined"
-              size="small"
-            />
-          </Box>
-          <TableSection filteredVehicles={filteredVehicles} fetchHistory={fetchHistory} />
+          <TableSection
+            filteredVehicles={filteredVehicles}
+            fetchHistory={fetchHistory}
+            filterStatus={filterStatus}
+            setFilterStatus={setFilterStatus}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+          />
         </Container>
       </section>
 
       {/* Reports */}
-      <section id="reports" className="py-16 bg-gradient-to-r from-indigo-50 to-blue-50">
+      <section id="reports" className="py-16 bg-gradient-to-r from-indigo-50 to-purple-50">
         <Container maxWidth="xl">
           <ReportsSection vehicles={vehicles} />
         </Container>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, Typography, Box } from '@mui/material';
+import { Card, CardContent, Typography, Box } from '@mui/material'; // اصلاح شد
 import { Pie, Bar, Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -31,9 +31,9 @@ const ReportsSection: React.FC<ReportsSectionProps> = ({ vehicles }) => {
     labels: ['Moving', 'Stopped', 'Idle'],
     datasets: [{
       data: [statusCount.moving, statusCount.stopped, statusCount.idle],
-      backgroundColor: ['#10B981', '#EF4444', '#F59E0B'],
+      backgroundColor: ['#7C3AED', '#A78BFA', '#EC4899'],
       borderWidth: 3,
-      borderColor: '#fff',
+      borderColor: '#1a1a2e',
     }],
   };
 
@@ -42,7 +42,7 @@ const ReportsSection: React.FC<ReportsSectionProps> = ({ vehicles }) => {
     datasets: [{
       label: 'Distance (km)',
       data: vehicles.map(v => v.distance),
-      backgroundColor: 'rgba(59, 130, 246, 0.8)',
+      backgroundColor: '#A78BFA',
       borderRadius: 8,
     }],
   };
@@ -52,52 +52,56 @@ const ReportsSection: React.FC<ReportsSectionProps> = ({ vehicles }) => {
     datasets: [{
       label: 'Total Distance (km)',
       data: [1200, 1350, 1100, 1500, 1600, 1400, 1300],
-      borderColor: '#8B5CF6',
-      backgroundColor: 'rgba(139, 92, 246, 0.1)',
+      borderColor: '#EC4899',
+      backgroundColor: 'rgba(236, 72, 153, 0.1)',
       tension: 0.4,
       fill: true,
     }],
   };
 
   return (
-    <Box className="space-y-8">
-      <Typography variant="h4" className="text-center font-bold text-indigo-800 mb-8">
+    <Box sx={{ mb: 6 }}>
+      <Typography 
+        variant="h4" 
+        className="text-center font-bold mb-10"
+        sx={{ 
+          background: 'linear-gradient(to right, #7C3AED, #A78BFA, #EC4899)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          fontWeight: 800,
+          fontFamily: '"Poppins", sans-serif',
+        }}
+      >
         Analytics Reports
       </Typography>
 
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4, justifyContent: 'center' }}>
-        <Box sx={{ flex: '1 1 300px', maxWidth: '400px' }}>
-          <Card className="h-full shadow-lg hover:shadow-xl transition-shadow border-t-4 border-t-green-500">
-            <CardContent>
-              <Typography variant="h6" gutterBottom className="text-gray-700">Vehicle Status</Typography>
-              <Box sx={{ height: 280 }}>
-                <Pie data={pieData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }} />
-              </Box>
-            </CardContent>
-          </Card>
-        </Box>
-
-        <Box sx={{ flex: '1 1 300px', maxWidth: '400px' }}>
-          <Card className="h-full shadow-lg hover:shadow-xl transition-shadow border-t-4 border-t-blue-500">
-            <CardContent>
-              <Typography variant="h6" gutterBottom className="text-gray-700">Distance Traveled</Typography>
-              <Box sx={{ height: 280 }}>
-                <Bar data={barData} options={{ responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }} />
-              </Box>
-            </CardContent>
-          </Card>
-        </Box>
-
-        <Box sx={{ flex: '1 1 300px', maxWidth: '400px' }}>
-          <Card className="h-full shadow-lg hover:shadow-xl transition-shadow border-t-4 border-t-purple-500">
-            <CardContent>
-              <Typography variant="h6" gutterBottom className="text-gray-700">Weekly Trend</Typography>
-              <Box sx={{ height: 280 }}>
-                <Line data={lineData} options={{ responsive: true, maintainAspectRatio: false }} />
-              </Box>
-            </CardContent>
-          </Card>
-        </Box>
+        {[
+          { title: 'Vehicle Status', chart: <Pie data={pieData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#C4B5FD' } } } }} />, border: '#7C3AED' },
+          { title: 'Distance Traveled', chart: <Bar data={barData} options={{ responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { color: '#C4B5FD' } }, x: { ticks: { color: '#C4B5FD' } } } }} />, border: '#A78BFA' },
+          { title: 'Weekly Trend', chart: <Line data={lineData} options={{ responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { color: '#C4B5FD' } }, x: { ticks: { color: '#C4B5FD' } } } }} />, border: '#EC4899' },
+        ].map((item, i) => (
+          <Box key={i} sx={{ flex: '1 1 300px', maxWidth: '400px' }}>
+            <Card sx={{
+              background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+              border: `1px solid rgba(167, 139, 250, 0.2)`,
+              boxShadow: '0 8px 32px rgba(124, 58, 237, 0.2)',
+              borderRadius: 3,
+              transition: 'all 0.3s ease',
+              '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 16px 40px rgba(124, 58, 237, 0.35)' },
+              borderTop: `4px solid ${item.border}`
+            }}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom sx={{ color: '#A78BFA', fontWeight: 600 }}>
+                  {item.title}
+                </Typography>
+                <Box sx={{ height: 280 }}>
+                  {item.chart}
+                </Box>
+              </CardContent>
+            </Card>
+          </Box>
+        ))}
       </Box>
     </Box>
   );

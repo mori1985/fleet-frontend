@@ -27,7 +27,7 @@ const PerformanceSection: React.FC<PerformanceSectionProps> = ({ vehicles }) => 
     labels: ['Active', 'Inactive'],
     datasets: [{
       data: [uptime, 100 - uptime],
-      backgroundColor: ['#10B981', '#E5E7EB'],
+      backgroundColor: ['#7C3AED', '#4C1D95'],
       borderWidth: 0,
       cutout: '70%',
     }],
@@ -38,51 +38,85 @@ const PerformanceSection: React.FC<PerformanceSectionProps> = ({ vehicles }) => 
     datasets: [{
       label: 'Average Performance',
       data: [75, 82, 60, 88, 90],
-      backgroundColor: 'rgba(59, 130, 246, 0.2)',
-      borderColor: '#3B82F6',
-      pointBackgroundColor: '#3B82F6',
+      backgroundColor: 'rgba(167, 139, 250, 0.15)',
+      borderColor: '#A78BFA',
+      pointBackgroundColor: '#A78BFA',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: '#3B82F6',
+      pointHoverBorderColor: '#A78BFA',
     }],
   };
 
   return (
-    <Box className="space-y-8">
+    <Box sx={{ mb: 6 }}>
+      {/* عنوان اصلی */}
       <Typography 
         variant="h4" 
-        className="text-center font-bold mb-8"
+        className="text-center font-bold mb-10"
         sx={{ 
-          background: 'linear-gradient(to right, #7C3AED, #EC4899)', 
+          background: 'linear-gradient(to right, #7C3AED, #A78BFA, #EC4899)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
-          fontWeight: 700
+          fontWeight: 800,
+          fontFamily: '"Poppins", sans-serif',
+          letterSpacing: '0.5px',
         }}
       >
         Fleet Performance Analysis
       </Typography>
 
+      {/* چارت‌ها */}
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4, justifyContent: 'center' }}>
+        {/* Activity Rate */}
         <Box sx={{ flex: '1 1 350px', maxWidth: '500px' }}>
-          <Card className="h-full shadow-lg hover:shadow-xl transition-shadow border-t-4 border-t-green-500">
-            <CardContent className="text-center">
-              <Typography variant="h6" gutterBottom className="text-gray-700 font-medium">
+          <Card sx={{
+            background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+            border: '1px solid rgba(167, 139, 250, 0.2)',
+            boxShadow: '0 8px 32px rgba(124, 58, 237, 0.2)',
+            borderRadius: 3,
+            transition: 'all 0.3s ease',
+            '&:hover': { 
+              transform: 'translateY(-4px)', 
+              boxShadow: '0 16px 40px rgba(124, 58, 237, 0.35)' 
+            },
+            borderTop: '4px solid #7C3AED'
+          }}>
+            <CardContent sx={{ textAlign: 'center' }}>
+              <Typography variant="h6" gutterBottom sx={{ color: '#A78BFA', fontWeight: 600 }}>
                 Activity Rate
               </Typography>
               <Box sx={{ height: 300 }}>
-                <Doughnut data={doughnutData} options={{ responsive: true, maintainAspectRatio: false }} />
+                <Doughnut data={doughnutData} options={{ 
+                  responsive: true, 
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { labels: { color: '#C4B5FD' } }
+                  }
+                }} />
               </Box>
-              <Typography variant="h5" className="mt-4 font-bold text-green-600">
+              <Typography variant="h5" sx={{ mt: 2, fontWeight: 700, color: '#C4B5FD' }}>
                 {uptime}%
               </Typography>
             </CardContent>
           </Card>
         </Box>
 
+        {/* Key Metrics */}
         <Box sx={{ flex: '1 1 350px', maxWidth: '500px' }}>
-          <Card className="h-full shadow-lg hover:shadow-xl transition-shadow border-t-4 border-t-purple-500">
+          <Card sx={{
+            background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+            border: '1px solid rgba(167, 139, 250, 0.2)',
+            boxShadow: '0 8px 32px rgba(124, 58, 237, 0.2)',
+            borderRadius: 3,
+            transition: 'all 0.3s ease',
+            '&:hover': { 
+              transform: 'translateY(-4px)', 
+              boxShadow: '0 16px 40px rgba(124, 58, 237, 0.35)' 
+            },
+            borderTop: '4px solid #A78BFA'
+          }}>
             <CardContent>
-              <Typography variant="h6" gutterBottom className="text-gray-700 font-medium">
+              <Typography variant="h6" gutterBottom sx={{ color: '#A78BFA', fontWeight: 600 }}>
                 Key Metrics
               </Typography>
               <Box sx={{ height: 300 }}>
@@ -91,11 +125,14 @@ const PerformanceSection: React.FC<PerformanceSectionProps> = ({ vehicles }) => 
                   maintainAspectRatio: false,
                   scales: {
                     r: {
-                      angleLines: { color: 'rgba(0,0,0,0.1)' },
-                      grid: { color: 'rgba(0,0,0,0.1)' },
-                      pointLabels: { font: { size: 12 } },
-                      ticks: { backdropColor: 'transparent' }
+                      angleLines: { color: 'rgba(167, 139, 250, 0.2)' },
+                      grid: { color: 'rgba(167, 139, 250, 0.1)' },
+                      pointLabels: { color: '#C4B5FD' },
+                      ticks: { color: '#A78BFA', backdropColor: 'transparent' }
                     }
+                  },
+                  plugins: {
+                    legend: { labels: { color: '#C4B5FD' } }
                   }
                 }} />
               </Box>
@@ -104,18 +141,44 @@ const PerformanceSection: React.FC<PerformanceSectionProps> = ({ vehicles }) => 
         </Box>
       </Box>
 
+      {/* کارت‌های کوچک */}
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, justifyContent: 'center', mt: 6 }}>
         {[
-          { label: 'Average Speed', value: `${avgSpeed} km/h`, color: 'bg-blue-600' },
-          { label: 'Fuel Efficiency', value: `${fuelEfficiency} L/100km`, color: 'bg-amber-600' },
-          { label: 'Total Distance', value: `${vehicles.reduce((a, b) => a + b.distance, 0).toLocaleString()} km`, color: 'bg-green-600' },
+          { label: 'Average Speed', value: `${avgSpeed} km/h`, bg: '#7C3AED' },
+          { label: 'Fuel Efficiency', value: `${fuelEfficiency} L/100km`, bg: '#A78BFA' },
+          { label: 'Total Distance', value: `${vehicles.reduce((a, b) => a + b.distance, 0).toLocaleString()} km`, bg: '#EC4899' },
         ].map((item, i) => (
           <Box key={i} sx={{ flex: '1 1 200px', maxWidth: '300px' }}>
-            <Card className="text-center p-4 bg-gradient-to-br from-white to-gray-50 shadow-md hover:shadow-lg transition-shadow">
-              <Typography variant="body2" color="textSecondary" className="font-medium">
+            <Card sx={{
+              background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+              border: '1px solid rgba(167, 139, 250, 0.2)',
+              boxShadow: '0 8px 32px rgba(124, 58, 237, 0.2)',
+              borderRadius: 3,
+              textAlign: 'center',
+              p: 3,
+              transition: 'all 0.3s ease',
+              '&:hover': { 
+                transform: 'translateY(-4px)', 
+                boxShadow: '0 16px 40px rgba(124, 58, 237, 0.35)' 
+              }
+            }}>
+              <Typography variant="body2" sx={{ color: '#A78BFA', fontWeight: 500 }}>
                 {item.label}
               </Typography>
-              <Typography variant="h5" className={`font-bold mt-2 ${item.color} text-white px-4 py-2 rounded-full inline-block shadow-md`}>
+              <Typography 
+                variant="h5" 
+                sx={{ 
+                  fontWeight: 700, 
+                  mt: 1.5, 
+                  bgcolor: item.bg, 
+                  color: 'white', 
+                  px: 3, 
+                  py: 1.5, 
+                  borderRadius: 3, 
+                  display: 'inline-block',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+                }}
+              >
                 {item.value}
               </Typography>
             </Card>
