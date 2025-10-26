@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
-import { Container, Box } from "@mui/material";
+import { Container } from "@mui/material"; // فقط Container نگه داشتیم
 import Navbar from "./components/Navbar";
 import FilterSection from "./components/FilterSection";
 import KPISection from "./components/KPISection";
@@ -76,7 +76,7 @@ const Dashboard: React.FC = () => {
     );
   }, [vehicles, filterStatus, searchTerm]);
 
-  const center: LatLngExpression = [52.605150, 13.261390]; // مرکز تقریبی برلین برای 20 لوکیشن
+  const center: LatLngExpression = [52.5200, 13.4050];
   const activeVehiclesCount = filteredVehicles.filter(
     (v) => v.status === "moving"
   ).length;
@@ -117,7 +117,7 @@ const Dashboard: React.FC = () => {
             vehicles={filteredVehicles}
             center={center}
             mapRef={mapRef}
-            fetchHistory={() => {}} // تابع خالی چون دیگه نیازی به تاریخچه نداریم
+            fetchHistory={() => {}}
           />
         </Container>
       </section>
@@ -130,7 +130,7 @@ const Dashboard: React.FC = () => {
         <Container maxWidth="xl">
           <TableSection
             filteredVehicles={filteredVehicles}
-            fetchHistory={() => {}} // تابع خالی
+            fetchHistory={() => {}}
             filterStatus={filterStatus}
             setFilterStatus={setFilterStatus}
             searchTerm={searchTerm}

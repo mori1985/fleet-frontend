@@ -1,15 +1,15 @@
-import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { Vehicle } from '../types';
+import React from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { Vehicle } from "../types";
 
 // Fix Leaflet icon issue
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
+  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
+  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
 });
 
 interface MapSectionProps {
@@ -21,9 +21,9 @@ interface MapSectionProps {
 
 const MapSection: React.FC<MapSectionProps> = ({ vehicles, center, mapRef, fetchHistory }) => {
   const createVehicleIcon = (status: string | undefined) => {
-    const safeStatus = status || 'idle';
-    const color = safeStatus === 'moving' ? '#10B981' : safeStatus === 'stopped' ? '#EF4444' : '#F59E0B';
-    const pulse = safeStatus === 'moving' ? '<div class="pulse"></div>' : '';
+    const safeStatus = status || "idle";
+    const color = safeStatus === "moving" ? "#10B981" : safeStatus === "stopped" ? "#EF4444" : "#F59E0B";
+    const pulse = safeStatus === "moving" ? '<div class="pulse"></div>' : "";
 
     return L.divIcon({
       html: `
@@ -66,20 +66,20 @@ const MapSection: React.FC<MapSectionProps> = ({ vehicles, center, mapRef, fetch
           }
         </style>
       `,
-      className: '',
+      className: "",
       iconSize: [40, 40],
       iconAnchor: [20, 40],
     });
   };
 
   return (
-    <div style={{ height: '600px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
-      <MapContainer center={center} zoom={12} style={{ height: '100%', width: '100%' }} ref={mapRef}>
+    <div style={{ height: "600px", borderRadius: "12px", overflow: "hidden", boxShadow: "0 10px 30px rgba(0,0,0,0.2)" }}>
+      <MapContainer center={center} zoom={12} style={{ height: "100%", width: "100%" }} ref={mapRef}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         />
-        {vehicles.map(vehicle => (
+        {vehicles.map((vehicle) => (
           <Marker
             key={vehicle.id}
             position={[vehicle.lat, vehicle.lng]}
@@ -88,18 +88,18 @@ const MapSection: React.FC<MapSectionProps> = ({ vehicles, center, mapRef, fetch
               click: () => fetchHistory(vehicle.id),
             }}
           >
-            <Popup className="custom-popup">
+            <Popup>
               <div style={{ 
-                background: 'linear-gradient(135deg, #1a1a2e, #16213e)', 
-                color: '#C4B5FD', 
-                padding: '15px', 
-                borderRadius: '8px', 
-                boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
-                maxWidth: '250px',
+                background: "linear-gradient(135deg, #1a1a2e, #16213e)", 
+                color: "#C4B5FD", 
+                padding: "15px", 
+                borderRadius: "8px", 
+                boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+                maxWidth: "250px",
                 fontFamily: '"Poppins", sans-serif'
               }}>
-                <h3 style={{ color: '#A78BFA', fontWeight: 700, marginBottom: '10px' }}>{vehicle.name}</h3>
-                <p><strong>Status:</strong> <span style={{ color: vehicle.status === 'moving' ? '#10B981' : vehicle.status === 'stopped' ? '#EF4444' : '#F59E0B' }}>{vehicle.status?.toUpperCase() || 'UNKNOWN'}</span></p>
+                <h3 style={{ color: "#A78BFA", fontWeight: 700, marginBottom: "10px" }}>{vehicle.name}</h3>
+                <p><strong>Status:</strong> <span style={{ color: vehicle.status === "moving" ? "#10B981" : vehicle.status === "stopped" ? "#EF4444" : "#F59E0B" }}>{vehicle.status?.toUpperCase() || "UNKNOWN"}</span></p>
                 <p><strong>Driver:</strong> {vehicle.driverName} (ID: {vehicle.driverId})</p>
                 <p><strong>Vehicle Class:</strong> {vehicle.vehicleClass}</p>
                 <p><strong>Cargo:</strong> {vehicle.cargo}</p>
