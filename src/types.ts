@@ -4,8 +4,13 @@ export interface Vehicle {
   lat: number;
   lng: number;
   status: 'moving' | 'stopped' | 'idle';
+  speed: number;
   distance: number;
-  speed: number; // اضافه شد
+  driverName: string;
+  driverId: string;
+  cargo: string;
+  fuelConsumption: number;
+  vehicleClass: string;
 }
 
 export interface VehicleHistory {
