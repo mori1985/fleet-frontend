@@ -79,7 +79,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate }) => {
             display: 'block', // همیشه نمایش داده بشه
           }}
         >
-          FLEET DASHBOARD MANAGER
+        DEMO FLEET DASHBOARD MANAGER
         </Typography>
 
         {/* منو همبرگری تو موبایل */}
